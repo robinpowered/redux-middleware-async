@@ -1,0 +1,19 @@
+{
+  "name": "redux-middleware-async",
+  "version": "0.0.1",
+  "description": "Redux middleware for making asynchronous API calls.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/robinpowered/redux-middleware-async.git"
+  },
+  "author": "Nick Zuber <zuber.nicholas@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/robinpowered/redux-middleware-async/issues"
+  },
+  "homepage": "https://github.com/robinpowered/redux-middleware-async#readme"
+}
