@@ -1,10 +1,11 @@
 {
   "name": "redux-middleware-async",
   "version": "0.0.1",
-  "description": "Redux middleware for making asynchronous API calls.",
+  "description": "Redux middleware for performing predictable asynchronous actions",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "./node_modules/.bin/eslint ./**/*.js"
+		"test": "node ./test/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/robinpowered/redux-middleware-async/issues"
   },
-  "homepage": "https://github.com/robinpowered/redux-middleware-async#readme"
+  "homepage": "https://github.com/robinpowered/redux-middleware-async#readme",
+  "devDependencies": {
+    "eslint": "^3.7.1",
+    "tape": "^4.6.2"
+  }
 }
