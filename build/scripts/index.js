@@ -4,12 +4,12 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _callAPI = require('./callAPI');
+var _shouldCallAPI = require('./shouldCallAPI');
 
-var _callAPI2 = _interopRequireDefault(_callAPI);
+var _shouldCallAPI2 = _interopRequireDefault(_shouldCallAPI);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-	callAPI: _callAPI2.default
+	shouldCallAPI: _shouldCallAPI2.default
 };

@@ -2,10 +2,10 @@
 
 import Constants from './constants';
 import Middleware from './middleware';
-import Scripts from './scipts';
+import Scripts from './scripts';
 
 export default {
-	Constants.Status,
-  Middleware.callAPI,
-  Scripts.shouldCallAPI
+	Status: [Constants.Status],
+  callAPI: [Middleware.callAPI],
+  shouldCallAPI: [Scripts.shouldCallAPI]
 };
