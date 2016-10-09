@@ -1,5 +1,17 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _constants = require('../constants');
+
+var _constants2 = _interopRequireDefault(_constants);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Status = _constants2.default.Status;
+
 /**
  * Middleware that looks for a 'callAPI' property on the action.
  *
@@ -7,10 +19,6 @@
  * Dispatches the action twice: once with an appended status of 'request', then
  * again with an appended status based on the result of running the `callAPI` function.
  */
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 function callAPI(_ref) {
   var dispatch = _ref.dispatch;
   var getState = _ref.getState;

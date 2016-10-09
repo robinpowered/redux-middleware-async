@@ -1,4 +1,7 @@
 'use strict';
+import Constants from '../constants';
+
+const Status = Constants.Status;
 
 /**
  * Middleware that looks for a 'callAPI' property on the action.
