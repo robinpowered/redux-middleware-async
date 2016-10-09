@@ -8,6 +8,9 @@ import {
   shouldCallAPI
 } from '../build';
 
+/*
+ * SUCCESSFUL CALL
+ */
 test('Checking a successful API call', (t) => {
   // Mock payload
   const payload = {
@@ -75,6 +78,9 @@ test('Checking a successful API call', (t) => {
   });
 });
 
+/*
+ * FAILURE CALL
+ */
 test('Checking a failed API call', (t) => {
   // Mock payload
   const payload = {
@@ -140,4 +146,54 @@ test('Checking a failed API call', (t) => {
     t.equal(secondCallResult, true, 'Checking args of second call');
     t.end();
   });
+});
+
+/*
+ * shouldCallAPI FALSE CALL
+ */
+test('Checking an API call with `shouldCallAPI` set to false', (t) => {
+  // Mock payload
+  const payload = {
+    foo: 'bar'
+  };
+
+  // Mock api call as promise with external control
+  var resolve, reject;
+  const mockAPICall = new Promise((resolver, rejecter) => {
+    resolve = resolver;
+    reject = rejecter;
+  });
+
+  // Mock action using mock api call
+  const mockAction = {
+    type: 'MOCK_ACTION',
+    shouldCallAPI: () => false,
+    callAPI: () => mockAPICall,
+    payload
+  };
+
+  // Construct spies
+  const dispatch = sinon.spy();
+  const mockNext = sinon.spy();
+
+  // Mock store state
+  const mockStoreState = {
+    foo: 'fiz',
+    bar: 'baz'
+  };
+
+  // Mock store containing our disaptch spy
+  const mockStore = {
+    dispatch,
+    getState: () => mockStoreState
+  };
+
+  // Simulate call
+  var constructedMiddleware = callAPI(mockStore)(mockNext);
+  constructedMiddleware(mockAction);
+
+  // shouldCallAPI flag was set to false, no call should have happened.
+  var firstCall = mockStore.dispatch.firstCall;
+  t.equal(!!firstCall, false, 'Checking for a first call');
+  t.end();
 });
