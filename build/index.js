@@ -31,4 +31,3 @@ exports.default = {
   callAPI: callAPI,
   shouldCallAPI: shouldCallAPI
 };
-;

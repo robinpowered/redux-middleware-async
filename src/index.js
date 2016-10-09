@@ -15,7 +15,7 @@ export {
 };
 
 export default {
-	Status,
+  Status,
   callAPI,
   shouldCallAPI
-};;
+};

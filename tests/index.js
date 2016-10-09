@@ -61,7 +61,7 @@ test('Checking a successful API call', (t) => {
   // Resolve the promise to simulate api call succeeding
   resolve('foobar');
 
-  setTimeout(() => {
+  process.nextTick(() => {
     var secondCall = mockStore.dispatch.secondCall;
     var secondCallResult = mockStore.dispatch.calledWith({
       type: 'MOCK_ACTION',
@@ -72,7 +72,7 @@ test('Checking a successful API call', (t) => {
     t.equal(!!secondCall, true, 'Checking for a second call');
     t.equal(secondCallResult, true, 'Checking args of second call');
     t.end();
-  }, 0);
+  });
 });
 
 test('Checking a failed API call', (t) => {
@@ -128,7 +128,7 @@ test('Checking a failed API call', (t) => {
   // Resolve the promise to simulate api call failing
   reject('Some error message');
 
-  setTimeout(() => {
+  process.nextTick(() => {
     var secondCall = mockStore.dispatch.secondCall;
     var secondCallResult = mockStore.dispatch.calledWith({
       type: 'MOCK_ACTION',
@@ -139,5 +139,5 @@ test('Checking a failed API call', (t) => {
     t.equal(!!secondCall, true, 'Checking for a second call');
     t.equal(secondCallResult, true, 'Checking args of second call');
     t.end();
-  }, 500);
+  });
 });
