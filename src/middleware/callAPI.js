@@ -20,9 +20,9 @@ function callAPI({ dispatch, getState }) {
         payload = {}
       } = action;
 
-      // if (typeof shouldCallAPI !== 'function') {
-      //   // throw error or ignore
-      // }
+      if (typeof shouldCallAPI !== 'function') {
+        return Promise.reject(new Error('Not calling API: shouldCallAPI was not a function.'));
+      }
 
       if (typeof callAPI !== 'function') {
         // Normal action: pass it on
