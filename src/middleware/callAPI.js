@@ -17,8 +17,7 @@ function callAPI({ dispatch, getState }) {
         type,
         callAPI,
         shouldCallAPI = () => true,
-        payload = {},
-        optimizeParams
+        payload = {}
       } = action;
 
       if (typeof callAPI !== 'function') {
@@ -26,33 +25,31 @@ function callAPI({ dispatch, getState }) {
         return next(action);
       }
 
-      var optimizedParams;
-      if (typeof optimizeParams === 'function') {
-        optimizedParams = optimizeParams(getState());
-      }
-
-      if (!shouldCallAPI(getState(), optimizedParams)) {
+      if (!shouldCallAPI(getState())) {
         return Promise.reject(new Error('Not calling API: shouldCallAPI flag was set as false.'));
       }
 
-      dispatch(Object.assign({}, payload, {
+      dispatch({
+        ...payload,
         type,
         status: Status.REQUEST
-      }));
+      });
 
-      const dispatchError = error => dispatch(Object.assign({}, payload, {
-        error: error,
+      const dispatchError = error => dispatch({
+        ...payload,
+        error,
         type,
         status: Status.FAILURE
-      }));
+      });
 
-      const dispatchSuccess = response => dispatch(Object.assign({}, payload, {
-        response: response,
+      const dispatchSuccess = response => dispatch({
+        ...payload,
+        response,
         type,
         status: Status.SUCCESS
-      }));
+      });
 
-      return callAPI(getState(), optimizedParams).then(
+      return callAPI(getState()).then(
         dispatchSuccess,
         dispatchError
       );

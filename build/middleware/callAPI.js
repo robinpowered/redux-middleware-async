@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _constants = require('../constants');
 
 var _constants2 = _interopRequireDefault(_constants);
@@ -33,7 +35,6 @@ function callAPI(_ref) {
       } : _action$shouldCallAPI;
       var _action$payload = action.payload;
       var payload = _action$payload === undefined ? {} : _action$payload;
-      var optimizeParams = action.optimizeParams;
 
 
       if (typeof callAPI !== 'function') {
@@ -41,22 +42,17 @@ function callAPI(_ref) {
         return next(action);
       }
 
-      var optimizedParams;
-      if (typeof optimizeParams === 'function') {
-        optimizedParams = optimizeParams(getState());
-      }
-
-      if (!shouldCallAPI(getState(), optimizedParams)) {
+      if (!shouldCallAPI(getState())) {
         return Promise.reject(new Error('Not calling API: shouldCallAPI flag was set as false.'));
       }
 
-      dispatch(Object.assign({}, payload, {
+      dispatch(_extends({}, payload, {
         type: type,
         status: Status.REQUEST
       }));
 
       var dispatchError = function dispatchError(error) {
-        return dispatch(Object.assign({}, payload, {
+        return dispatch(_extends({}, payload, {
           error: error,
           type: type,
           status: Status.FAILURE
@@ -64,14 +60,14 @@ function callAPI(_ref) {
       };
 
       var dispatchSuccess = function dispatchSuccess(response) {
-        return dispatch(Object.assign({}, payload, {
+        return dispatch(_extends({}, payload, {
           response: response,
           type: type,
           status: Status.SUCCESS
         }));
       };
 
-      return callAPI(getState(), optimizedParams).then(dispatchSuccess, dispatchError);
+      return callAPI(getState()).then(dispatchSuccess, dispatchError);
     };
   };
 }
