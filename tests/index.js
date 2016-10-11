@@ -12,10 +12,16 @@ const payload = {
   foo: 'bar'
 };
 
+// Global mock store state
+const mockStoreState = {
+  foo: 'fiz',
+  bar: 'baz'
+};
+
 // Mock api call as promise with external control
 function createMockAPICallPromise () {
   var resolve, reject;
-  var mockAPICall = new Promise((resolver, rejecter) => {
+  var promise = new Promise((resolver, rejecter) => {
     resolve = resolver;
     reject = rejecter;
   });
@@ -23,15 +29,15 @@ function createMockAPICallPromise () {
   return {
     resolve,
     reject,
-    mockAPICall
+    promise
   };
 };
 
 // Mock action using mock api call
-function createMockActionWithPromise (mockAPICall, shouldCallAPI = true) {
+function createMockActionWithPromise (mockAPICall, shouldCallAPI = () => true) {
   return {
     type: 'MOCK_ACTION',
-    shouldCallAPI: () => shouldCallAPI,
+    shouldCallAPI: (state) => shouldCallAPI(state),
     callAPI: () => mockAPICall,
     payload
   };
@@ -39,10 +45,6 @@ function createMockActionWithPromise (mockAPICall, shouldCallAPI = true) {
 
 // Mock store containing our disaptch spy
 function createMockStore () {
-  const mockStoreState = {
-    foo: 'fiz',
-    bar: 'baz'
-  };
   var dispatch = sinon.spy();
 
   return {
@@ -55,10 +57,13 @@ function createMockStore () {
  * SUCCESSFUL CALL
  */
 test('Checking a successful API call', (t) => {
-  var mockPromise = createMockAPICallPromise();
-  var mockAction = createMockActionWithPromise(mockPromise.mockAPICall);
+  var deferred = createMockAPICallPromise();
+  var shouldCallAPISpy = sinon.spy(function () {
+    return true;
+  });
+  var mockAction = createMockActionWithPromise(deferred.promise, shouldCallAPISpy);
   var mockStore = createMockStore();
-  const mockNext = sinon.spy();
+  var mockNext = sinon.spy();
 
   // Simulate call
   var constructedMiddleware = callAPI(mockStore)(mockNext);
@@ -71,11 +76,15 @@ test('Checking a successful API call', (t) => {
     ...payload
   });
 
+  t.equal(shouldCallAPISpy.calledWith(mockStoreState),
+    true,
+    'Checking to see that `shouldCallAPI` was called with the store.'
+  );
   t.equal(!!firstCall, true, 'Checking for a first call');
   t.equal(firstCallResult, true, 'Checking args of first call');
 
   // Resolve the promise to simulate api call succeeding
-  mockPromise.resolve('foobar');
+  deferred.resolve('foobar');
 
   process.nextTick(() => {
     var secondCall = mockStore.dispatch.secondCall;
@@ -95,10 +104,13 @@ test('Checking a successful API call', (t) => {
  * FAILURE CALL
  */
 test('Checking a failed API call', (t) => {
-  var mockPromise = createMockAPICallPromise();
-  var mockAction = createMockActionWithPromise(mockPromise.mockAPICall);
+  var deferred = createMockAPICallPromise();
+  var shouldCallAPISpy = sinon.spy(function () {
+    return true;
+  });
+  var mockAction = createMockActionWithPromise(deferred.promise, shouldCallAPISpy);
   var mockStore = createMockStore();
-  const mockNext = sinon.spy();
+  var mockNext = sinon.spy();
 
   // Simulate call
   var constructedMiddleware = callAPI(mockStore)(mockNext);
@@ -111,11 +123,15 @@ test('Checking a failed API call', (t) => {
     ...payload
   });
 
+  t.equal(shouldCallAPISpy.calledWith(mockStoreState),
+    true,
+    'Checking to see that `shouldCallAPI` was called with the store.'
+  );
   t.equal(!!firstCall, true, 'Checking for a first call');
   t.equal(firstCallResult, true, 'Checking args of first call');
 
   // Resolve the promise to simulate api call failing
-  mockPromise.reject('Some error message');
+  deferred.reject('Some error message');
 
   process.nextTick(() => {
     var secondCall = mockStore.dispatch.secondCall;
@@ -135,10 +151,12 @@ test('Checking a failed API call', (t) => {
  * shouldCallAPI FALSE CALL
  */
 test('Checking an API call with `shouldCallAPI` set to false', (t) => {
-  var mockPromise = createMockAPICallPromise();
-  var mockAction = createMockActionWithPromise(mockPromise.mockAPICall, false);
+  var deferred = createMockAPICallPromise();
+  var mockAction = createMockActionWithPromise(deferred.promise, () => {
+    return false;
+  });
   var mockStore = createMockStore();
-  const mockNext = sinon.spy();
+  var mockNext = sinon.spy();
 
   // Simulate call
   var constructedMiddleware = callAPI(mockStore)(mockNext);

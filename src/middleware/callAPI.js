@@ -20,6 +20,10 @@ function callAPI({ dispatch, getState }) {
         payload = {}
       } = action;
 
+      // if (typeof shouldCallAPI !== 'function') {
+      //   // throw error or ignore
+      // }
+
       if (typeof callAPI !== 'function') {
         // Normal action: pass it on
         return next(action);

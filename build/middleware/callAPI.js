@@ -36,6 +36,9 @@ function callAPI(_ref) {
       var _action$payload = action.payload;
       var payload = _action$payload === undefined ? {} : _action$payload;
 
+      // if (typeof shouldCallAPI !== 'function') {
+      //   // throw error or ignore
+      // }
 
       if (typeof callAPI !== 'function') {
         // Normal action: pass it on
