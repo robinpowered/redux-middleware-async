@@ -2,7 +2,7 @@
   "name": "redux-middleware-async",
   "version": "0.0.1",
   "description": "Redux middleware for performing predictable asynchronous actions",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "./node_modules/.bin/babel src -d build",
     "lint": "./node_modules/.bin/eslint ./**/*.js || true",
